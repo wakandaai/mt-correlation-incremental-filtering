@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Outputs (generated files - don't commit)
+outputs/
+plots/*.png
+plots/*.jpg
+results/*.csv
+results/*.json
+
+# SLURM job outputs (definitely don't commit these!)
+slurm-*.out
+slurm-*.err
+*.out
+*.err
+
+# Large data files (if needed, document where to get them)
+data/fleurs_data/
+data/nllb_translations/
+*.tsv.gz
+*.tar.gz
+
+# Models (very large)
+models/
+*.bin
+*.pt
+*.safetensors
+*.onnx
+
+# Logs
+*.log
+logs/
+
+# Models
+models/
+*.bin
+*.pt
+*.safetensors
+
+# OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# IDE
+@PROJECT/
+
+# Jupyter
+.ipynb_checkpoints/
