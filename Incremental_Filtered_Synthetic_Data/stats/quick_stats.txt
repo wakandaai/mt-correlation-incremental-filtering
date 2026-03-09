@@ -1,0 +1,25 @@
+INCREMENTAL FILTERING SUMMARY
+==============================
+
+Total Original: 1,294,157 translations
+Total Filtered (top90): 1,164,740 (90.0% retention, +0.009 QE)
+Total Filtered (top75):   970,618 (75.0% retention, +0.020 QE)
+Total Filtered (top50):   647,081 (50.0% retention, +0.038 QE)
+
+By Language:
+------------
+Bemba:  794,806 → 715,325 / 596,105 / 397,405
+Hausa:   26,503 →  23,852 /  19,877 /  13,252
+Yoruba: 472,848 → 425,563 / 354,636 / 236,424
+
+Quality Improvements (Mean QE):
+--------------------------------
+Bemba:  0.520 → 0.532 / 0.544 / 0.563
+Hausa:  0.545 → 0.549 / 0.557 / 0.572
+Yoruba: 0.550 → 0.562 / 0.574 / 0.592
+
+Filter Level Comparison:
+------------------------
+top90: Maximum data (1.16M), minimal filtering (+0.009 QE)
+top75: Balanced (971K), recommended baseline (+0.020 QE)
+top50: High quality (647K), aggressive filtering (+0.038 QE)

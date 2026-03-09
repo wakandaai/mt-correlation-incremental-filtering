@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Compute MT metrics: chrF++, BLEU, and SSA-COMET-QE
+Compute MT metrics: chrF++, BLEU, and COMET
 """
 
 import pandas as pd
@@ -18,51 +18,29 @@ logger = logging.getLogger(__name__)
 
 
 def compute_chrf_bleu(predictions, references):
-    """
-    Compute chrF++ and BLEU scores
-    
-    Args:
-        predictions: List of prediction strings
-        references: List of reference strings
-    
-    Returns:
-        Two lists: chrf_scores, bleu_scores (sentence-level)
-    """
+    """Compute chrF++ and BLEU scores"""
     chrf_scores = []
     bleu_scores = []
     
     for pred, ref in tqdm(zip(predictions, references), total=len(predictions), 
                           desc="Computing chrF++/BLEU"):
-        # chrF++ (character-level F-score)
         chrf_score = sacrebleu.sentence_chrf(pred, [ref], word_order=2).score
         chrf_scores.append(chrf_score)
         
-        # Sentence-level BLEU
         bleu_score = sacrebleu.sentence_bleu(pred, [ref]).score
         bleu_scores.append(bleu_score)
     
     return chrf_scores, bleu_scores
 
 
-def compute_comet_qe(sources, predictions, model, batch_size=16):
-    """
-    Compute SSA-COMET-QE scores
+def compute_comet(sources, predictions, references, model, batch_size=16):
+    """Compute COMET scores (reference-based)"""
+    logger.info("Computing COMET scores")
     
-    Args:
-        sources: List of source strings
-        predictions: List of prediction strings
-        model: Loaded COMET model
-        batch_size: Batch size for inference
-    
-    Returns:
-        List of QE scores
-    """
-    logger.info("Computing SSA-COMET-QE scores")
-    
-    # Prepare data in COMET format (QE only needs source and prediction)
+    # Prepare data in COMET format
     data = [
-        {"src": src, "mt": pred}
-        for src, pred in zip(sources, predictions)
+        {"src": src, "mt": pred, "ref": ref}
+        for src, pred, ref in zip(sources, predictions, references)
     ]
     
     # Run model prediction
@@ -76,18 +54,7 @@ def compute_comet_qe(sources, predictions, model, batch_size=16):
 
 
 def compute_metrics_for_file(input_file, output_file, comet_model, batch_size=16):
-    """
-    Compute all metrics for a single file
-    
-    Args:
-        input_file: Path to translated CSV (must have: source, reference, prediction)
-        output_file: Path to output CSV with all metrics
-        comet_model: Loaded COMET model
-        batch_size: Batch size for COMET
-    
-    Returns:
-        Statistics dictionary
-    """
+    """Compute all metrics for a single file"""
     logger.info(f"Processing {input_file}")
     
     # Load data
@@ -97,7 +64,7 @@ def compute_metrics_for_file(input_file, output_file, comet_model, batch_size=16
     required_cols = ['source', 'reference', 'prediction']
     missing = [col for col in required_cols if col not in df.columns]
     if missing:
-        raise ValueError(f"Missing columns: {missing}. Found: {df.columns}")
+        raise ValueError(f"Missing columns: {missing}. Found: {df.columns.tolist()}")
     
     # Compute chrF++ and BLEU
     logger.info("Computing chrF++ and BLEU scores")
@@ -109,15 +76,16 @@ def compute_metrics_for_file(input_file, output_file, comet_model, batch_size=16
     df['chrf_score'] = chrf_scores
     df['bleu_score'] = bleu_scores
     
-    # Compute SSA-COMET-QE
-    qe_scores = compute_comet_qe(
+    # Compute COMET
+    comet_scores = compute_comet(
         df['source'].tolist(),
         df['prediction'].tolist(),
+        df['reference'].tolist(),
         comet_model,
         batch_size
     )
     
-    df['ssa_comet_qe_score'] = qe_scores
+    df['comet_score'] = comet_scores
     
     # Save
     df.to_csv(output_file, index=False)
@@ -130,44 +98,35 @@ def compute_metrics_for_file(input_file, output_file, comet_model, batch_size=16
         'num_sentences': len(df),
         'mean_chrf': df['chrf_score'].mean(),
         'mean_bleu': df['bleu_score'].mean(),
-        'mean_qe': df['ssa_comet_qe_score'].mean(),
+        'mean_comet': df['comet_score'].mean(),
         'median_chrf': df['chrf_score'].median(),
         'median_bleu': df['bleu_score'].median(),
-        'median_qe': df['ssa_comet_qe_score'].median(),
+        'median_comet': df['comet_score'].median(),
         'status': 'success'
     }
     
     logger.info(f"  Mean chrF++: {stats['mean_chrf']:.2f}")
     logger.info(f"  Mean BLEU: {stats['mean_bleu']:.2f}")
-    logger.info(f"  Mean QE: {stats['mean_qe']:.4f}")
+    logger.info(f"  Mean COMET: {stats['mean_comet']:.4f}")
     
     return stats
 
 
 def main():
     parser = argparse.ArgumentParser(description='Compute MT metrics')
-    parser.add_argument('--input-dir', default='./nllb_translations',
-                       help='Directory with NLLB translations')
-    parser.add_argument('--output-dir', default='./metrics_results',
-                       help='Directory to save results with metrics')
-    parser.add_argument('--comet-model', default='Unbabel/XCOMET-XL',
-                       help='COMET model to use')
-    parser.add_argument('--batch-size', type=int, default=16,
-                       help='Batch size for COMET inference')
-    parser.add_argument('--test-only', action='store_true',
-                       help='Process only test languages')
-    parser.add_argument('--languages', nargs='+',
-                       help='Specific languages to process')
-    parser.add_argument('--splits', nargs='+', default=['dev', 'test'],
-                       help='Splits to process')
+    parser.add_argument('--input-dir', default='./nllb_translations')
+    parser.add_argument('--output-dir', default='./metrics_results')
+    parser.add_argument('--comet-model', default='Unbabel/wmt22-comet-da')
+    parser.add_argument('--batch-size', type=int, default=16)
+    parser.add_argument('--test-only', action='store_true')
+    parser.add_argument('--languages', nargs='+')
+    parser.add_argument('--splits', nargs='+', default=['dev', 'test'])
     
     args = parser.parse_args()
     
-    # Create output directory
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Determine languages
     if args.languages:
         languages = {k: v for k, v in LANGUAGE_CONFIG.items() if k in args.languages}
     elif args.test_only:
@@ -196,7 +155,6 @@ def main():
         
         for split in args.splits:
             try:
-                # Construct file paths
                 input_file = Path(args.input_dir) / f"{lang_name.lower().replace(' ', '_')}_{split}_translated.csv"
                 output_file = output_dir / f"{lang_name.lower().replace(' ', '_')}_{split}_metrics.csv"
                 
@@ -204,7 +162,6 @@ def main():
                     logger.warning(f"Input file not found: {input_file}")
                     continue
                 
-                # Compute metrics
                 stats = compute_metrics_for_file(
                     input_file,
                     output_file,
@@ -234,15 +191,13 @@ def main():
     logger.info("METRICS COMPUTATION SUMMARY")
     logger.info("="*70)
     
-    # Show statistics
     if len(summary_df[summary_df['status'] == 'success']) > 0:
         success_df = summary_df[summary_df['status'] == 'success']
-        display_cols = ['language', 'split', 'num_sentences', 'mean_chrf', 'mean_bleu', 'mean_qe']
+        display_cols = ['language', 'split', 'num_sentences', 'mean_chrf', 'mean_bleu', 'mean_comet']
         logger.info(f"\n{success_df[display_cols].to_string()}")
     
     logger.info(f"\nSummary saved to: {summary_file}")
     
-    # Report results
     successes = summary_df[summary_df['status'] == 'success']
     failures = summary_df[summary_df['status'] == 'failed']
     

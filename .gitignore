@@ -8,6 +8,7 @@ env/
 venv/
 *.egg-info/
 .pytest_cache/
+*.pyc 
 
 # Outputs (generated files - don't commit)
 outputs/
@@ -27,6 +28,9 @@ data/fleurs_data/
 data/nllb_translations/
 *.tsv.gz
 *.tar.gz
+*.jsonl
+data/*.jsonl
+incremental_filtered/
 
 # Models (very large)
 models/
@@ -63,5 +67,3 @@ Thumbs.db
 # IDE
 @PROJECT/
 
-# Jupyter
-.ipynb_checkpoints/

@@ -1,13 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=corr-test
-#SBATCH --output=logs/correlation_test_%j.out
-#SBATCH --error=logs/correlation_test_%j.err
+#SBATCH --job-name=run-job
+#SBATCH --output=logs/run_job_%j.out
+#SBATCH --error=logs/run_job_%j.err
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --gres=gpu:v100-32:1
+#SBATCH --ntasks-per-node=4
 #SBATCH --partition=GPU-shared
-#SBATCH --time=8:00:00
+#SBATCH --gres=gpu:h100-80:1
+#SBATCH --time=24:00:00
 #SBATCH --account=cis250145p
 
 echo "=========================================="

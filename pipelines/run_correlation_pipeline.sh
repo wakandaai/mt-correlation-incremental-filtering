@@ -14,7 +14,7 @@ echo "=========================================="
 # Configuration
 BATCH_SIZE=8
 NLLB_MODEL="facebook/nllb-200-3.3B"
-COMET_MODEL="Unbabel/XCOMET-XL"
+COMET_MODEL="Unbabel/wmt22-comet-da"
 
 # Determine which languages to process
 if [ "$MODE" == "test" ]; then

@@ -64,6 +64,14 @@ class NLLBTranslator:
         # Set source language
         self.tokenizer.src_lang = src_lang
         
+        # Get target language token ID (compatible with newer transformers)
+        if hasattr(self.tokenizer, 'lang_code_to_id'):
+            # Old method (transformers < 4.30)
+            tgt_lang_id = self.tokenizer.lang_code_to_id[tgt_lang]
+        else:
+            # New method (transformers >= 4.30)
+            tgt_lang_id = self.tokenizer.convert_tokens_to_ids(tgt_lang)
+        
         # Process in batches
         for i in tqdm(range(0, len(texts), batch_size), desc="Translating"):
             batch = texts[i:i + batch_size]
@@ -81,7 +89,7 @@ class NLLBTranslator:
             with torch.no_grad():
                 generated_tokens = self.model.generate(
                     **inputs,
-                    forced_bos_token_id=self.tokenizer.lang_code_to_id[tgt_lang],
+                    forced_bos_token_id=tgt_lang_id,  # Use the compatible variable
                     max_length=max_length,
                     num_beams=5,  # Beam search for better quality
                     early_stopping=True

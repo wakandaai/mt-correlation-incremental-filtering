@@ -17,7 +17,7 @@ LANGUAGE_CONFIG = {
         'fleurs_code': 'fr_fr',
         'nllb_code': 'fra_Latn',
         'iso_code': 'fra',
-        'priority': 'test'  # Use for initial testing
+        'priority': 'standard'  
     },
     'Portuguese': {
         'fleurs_code': 'pt_br',
@@ -29,13 +29,13 @@ LANGUAGE_CONFIG = {
         'fleurs_code': 'ar_eg',
         'nllb_code': 'arb_Arab',
         'iso_code': 'ara',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Afrikaans': {
         'fleurs_code': 'af_za',
         'nllb_code': 'afr_Latn',
         'iso_code': 'afr',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Swahili': {
         'fleurs_code': 'sw_ke',
@@ -47,116 +47,140 @@ LANGUAGE_CONFIG = {
         'fleurs_code': 'so_so',
         'nllb_code': 'som_Latn',
         'iso_code': 'som',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Hausa': {
         'fleurs_code': 'ha_ng',
         'nllb_code': 'hau_Latn',
         'iso_code': 'hau',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Amharic': {
         'fleurs_code': 'am_et',
         'nllb_code': 'amh_Ethi',
         'iso_code': 'amh',
-        'priority': 'standard'
+        'priority': 'test'
     },
     # Note: Plateau Malagasy might not be in FLEURS, using standard Malagasy
     'Malagasy': {
         'fleurs_code': 'mg_mg',
         'nllb_code': 'plt_Latn',  # Plateau Malagasy
         'iso_code': 'mlg',
-        'priority': 'standard'
+        'priority': 'notfound'
     },
     'Kinyarwanda': {
         'fleurs_code': 'rw_rw',  # May need to verify this
         'nllb_code': 'kin_Latn',
         'iso_code': 'kin',
-        'priority': 'test'  # Use for initial testing
+        'priority': 'notfound'  # Use for initial testing
     },
     'Xhosa': {
         'fleurs_code': 'xh_za',
         'nllb_code': 'xho_Latn',
         'iso_code': 'xho',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Zulu': {
         'fleurs_code': 'zu_za',
         'nllb_code': 'zul_Latn',
         'iso_code': 'zul',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Chichewa': {
         'fleurs_code': 'ny_mw',  # Nyanja/Chichewa
         'nllb_code': 'nya_Latn',
         'iso_code': 'nya',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Sesotho': {
-        'fleurs_code': 'st_za',
+        'fleurs_code': 'nso_za',
         'nllb_code': 'sot_Latn',
         'iso_code': 'sot',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Shona': {
         'fleurs_code': 'sn_zw',
         'nllb_code': 'sna_Latn',
         'iso_code': 'sna',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Igbo': {
         'fleurs_code': 'ig_ng',
         'nllb_code': 'ibo_Latn',
         'iso_code': 'ibo',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Yoruba': {
         'fleurs_code': 'yo_ng',
         'nllb_code': 'yor_Latn',
         'iso_code': 'yor',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Tigrinya': {
         'fleurs_code': 'ti_et',  # May need verification
         'nllb_code': 'tir_Ethi',
         'iso_code': 'tir',
-        'priority': 'standard'
+        'priority': 'notfound'
     },
     'Luganda': {
         'fleurs_code': 'lg_ug',
         'nllb_code': 'lug_Latn',
         'iso_code': 'lug',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Lingala': {
         'fleurs_code': 'ln_cd',
         'nllb_code': 'lin_Latn',
         'iso_code': 'lin',
-        'priority': 'standard'
+        'priority': 'test'
     },
     'Setswana': {
         'fleurs_code': 'tn_za',
         'nllb_code': 'tsn_Latn',
         'iso_code': 'tsn',
-        'priority': 'standard'
+        'priority': 'notfound'
     },
     'Wolof': {
         'fleurs_code': 'wo_sn',
         'nllb_code': 'wol_Latn',
         'iso_code': 'wol',
+        'priority': 'test'
+    },
+    'Kikuyu': {
+        'fleurs_code': 'ki_ke',
+        'nllb_code': 'kik_Latn',
+        'iso_code': 'kik',
+        'priority': 'standard'
+    },
+    'Luo': {
+        'fleurs_code': 'luo_ke',
+        'nllb_code': 'luo_Latn',
+        'iso_code': 'luo',
+        'priority': 'standard'
+    },
+    'Twi': {
+        'fleurs_code': 'tw_gh',
+        'nllb_code': 'twi_Latn',
+        'iso_code': 'twi',
+        'priority': 'notfound'
+    },
+    'Ewe': {
+        'fleurs_code': 'ee_gh',
+        'nllb_code': 'ewe_Latn',
+        'iso_code': 'ewe',
         'priority': 'standard'
     },
     'Bemba': {
-        'fleurs_code': 'bem_zm',  # May not be in FLEURS
+        'fleurs_code': 'bem_zm',  
         'nllb_code': 'bem_Latn',
         'iso_code': 'bem',
-        'priority': 'verify'  # Need to verify FLEURS support
+        'priority': 'notfound'  
     },
     'Fongbe': {
-        'fleurs_code': 'fon_bj',  # May not be in FLEURS
+        'fleurs_code': 'fon_bj', 
         'nllb_code': 'fon_Latn',
         'iso_code': 'fon',
-        'priority': 'verify'  # Need to verify FLEURS support
+        'priority': 'notfound'  
     },
     'English': {
         'fleurs_code': 'en_us',
