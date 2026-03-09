@@ -98,7 +98,7 @@ See `stats/filtering_summary.csv` for:
 
 Sylvia Kipkemoi (2026). "Incrementally Filtered Synthetic Translation Data for African Languages"  
 Based on QE correlation validation across 15 African languages.  
-Filtering pipeline: https://github.com/mt-correlation-analysis
+Filtering pipeline: https://github.com/sylviajebet/mt-correlation-analysis
 
 ## Contact
 
