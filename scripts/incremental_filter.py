@@ -11,7 +11,7 @@ QE_SCORE_COLUMN = "meta.ssa_score"  # UPDATE THIS based on Step 1!
 LANGUAGES = {
     'bem': 'Bemba',
     'hau': 'Hausa',
-    # 'ibo': 'Igbo',
+    'ibo': 'Igbo',
     'yor': 'Yoruba'
 }
 
