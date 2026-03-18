@@ -186,17 +186,3 @@ See `stats/filtering_summary.csv` for:
 - Per-language quality improvements
 
 ---
-
-## Citation
-
-Sylvia Kipkemoi (2026). "Incrementally Filtered Synthetic Translation Data for African Languages"  
-Based on QE correlation validation across 15 African languages.  
-Filtering pipeline: https://github.com/sylviajebet/mt-correlation-analysis
-
----
-
-## Contact
-
-For questions or issues: skipkemo@andrew.cmu.edu
-
----
