@@ -24,8 +24,7 @@ slurm-*.err
 *.err
 
 # Large data files (if needed, document where to get them)
-data/fleurs_data/
-data/nllb_translations/
+data/
 *.tsv.gz
 *.tar.gz
 *.jsonl
