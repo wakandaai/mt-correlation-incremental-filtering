@@ -70,7 +70,7 @@ echo "=========================================="
 python scripts/compute_metrics.py \
     --input-dir outputs/nllb_translations \
     --output-dir outputs/metrics_results \
-    --comet-model Unbabel/wmt22-comet-da \
+    --qe-model McGill-NLP/ssa-comet-qe \
     --batch-size 8 \
     --splits dev \
     --test-only

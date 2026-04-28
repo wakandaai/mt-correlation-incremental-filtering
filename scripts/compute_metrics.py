@@ -33,23 +33,17 @@ def compute_chrf_bleu(predictions, references):
     return chrf_scores, bleu_scores
 
 
-def compute_comet(sources, predictions, references, model, batch_size=16):
-    """Compute COMET scores (reference-based)"""
-    logger.info("Computing COMET scores")
-    
-    # Prepare data in COMET format
+def compute_ssa_qe(sources, predictions, model, batch_size=16):
+    """Reference-free QE scoring — SSA-COMET-QE takes only src + mt"""
     data = [
-        {"src": src, "mt": pred, "ref": ref}
-        for src, pred, ref in zip(sources, predictions, references)
+        {"src": src, "mt": pred}
+        for src, pred in zip(sources, predictions)
     ]
-    
-    # Run model prediction
     model_output = model.predict(
-        data, 
-        batch_size=batch_size, 
+        data,
+        batch_size=batch_size,
         gpus=1 if torch.cuda.is_available() else 0
     )
-    
     return model_output.scores
 
 
@@ -77,15 +71,13 @@ def compute_metrics_for_file(input_file, output_file, comet_model, batch_size=16
     df['bleu_score'] = bleu_scores
     
     # Compute COMET
-    comet_scores = compute_comet(
-        df['source'].tolist(),
-        df['prediction'].tolist(),
-        df['reference'].tolist(),
-        comet_model,
-        batch_size
+    ssa_qe_scores = compute_ssa_qe(
+    df['source'].tolist(),
+    df['prediction'].tolist(),
+    comet_model,
+    batch_size
     )
-    
-    df['comet_score'] = comet_scores
+    df['ssa_qe_score'] = ssa_qe_scores
     
     # Save
     df.to_csv(output_file, index=False)
@@ -98,10 +90,10 @@ def compute_metrics_for_file(input_file, output_file, comet_model, batch_size=16
         'num_sentences': len(df),
         'mean_chrf': df['chrf_score'].mean(),
         'mean_bleu': df['bleu_score'].mean(),
-        'mean_comet': df['comet_score'].mean(),
+        'mean_ssa_qe': df['ssa_qe_score'].mean(),
         'median_chrf': df['chrf_score'].median(),
         'median_bleu': df['bleu_score'].median(),
-        'median_comet': df['comet_score'].median(),
+        'median_ssa_qe': df['ssa_qe_score'].median(),
         'status': 'success'
     }
     
@@ -116,7 +108,7 @@ def main():
     parser = argparse.ArgumentParser(description='Compute MT metrics')
     parser.add_argument('--input-dir', default='./nllb_translations')
     parser.add_argument('--output-dir', default='./metrics_results')
-    parser.add_argument('--comet-model', default='Unbabel/wmt22-comet-da')
+    parser.add_argument('--qe-model', default='McGill-NLP/ssa-comet-qe')
     parser.add_argument('--batch-size', type=int, default=16)
     parser.add_argument('--test-only', action='store_true')
     parser.add_argument('--languages', nargs='+')
@@ -141,10 +133,10 @@ def main():
     logger.info(f"Computing metrics for {len(languages)} languages")
     
     # Load COMET model
-    logger.info(f"Loading COMET model: {args.comet_model}")
-    model_path = download_model(args.comet_model)
-    comet_model = load_from_checkpoint(model_path)
-    logger.info("COMET model loaded")
+    logger.info(f"Loading QE model: {args.qe_model}")
+    model_path = download_model(args.qe_model)
+    qe_model = load_from_checkpoint(model_path)
+    logger.info("QE model loaded")
     
     # Process each language and split
     all_stats = []

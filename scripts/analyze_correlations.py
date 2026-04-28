@@ -41,21 +41,21 @@ def compute_correlations(df, language, split):
     
     # QE vs chrF++
     pearson_qe_chrf, p_qe_chrf = stats.pearsonr(
-        df['comet_score'], 
+        df['ssa_qe_score'], 
         df['chrf_score']
     )
     spearman_qe_chrf, sp_qe_chrf = stats.spearmanr(
-        df['comet_score'], 
+        df['ssa_qe_score'], 
         df['chrf_score']
     )
     
     # QE vs BLEU
     pearson_qe_bleu, p_qe_bleu = stats.pearsonr(
-        df['comet_score'], 
+        df['ssa_qe_score'], 
         df['bleu_score']
     )
     spearman_qe_bleu, sp_qe_bleu = stats.spearmanr(
-        df['comet_score'], 
+        df['ssa_qe_score'], 
         df['bleu_score']
     )
     
@@ -103,14 +103,14 @@ def plot_scatter_correlations(df, language, split, output_dir):
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
     
     # QE vs chrF++
-    axes[0].scatter(df['comet_score'], df['chrf_score'], alpha=0.5, s=20)
-    r_pearson = stats.pearsonr(df['comet_score'], df['chrf_score'])[0]
-    r_spearman = stats.spearmanr(df['comet_score'], df['chrf_score'])[0]
+    axes[0].scatter(df['ssa_qe_score'], df['chrf_score'], alpha=0.5, s=20)
+    r_pearson = stats.pearsonr(df['ssa_qe_score'], df['chrf_score'])[0]
+    r_spearman = stats.spearmanr(df['ssa_qe_score'], df['chrf_score'])[0]
     
     # Add regression line
-    z = np.polyfit(df['comet_score'], df['chrf_score'], 1)
+    z = np.polyfit(df['ssa_qe_score'], df['chrf_score'], 1)
     p = np.poly1d(z)
-    axes[0].plot(df['comet_score'], p(df['comet_score']), 
+    axes[0].plot(df['ssa_qe_score'], p(df['ssa_qe_score']), 
                 "r--", alpha=0.8, linewidth=2)
     
     axes[0].set_xlabel('SSA-COMET-QE Score', fontsize=12)
@@ -120,14 +120,14 @@ def plot_scatter_correlations(df, language, split, output_dir):
     axes[0].grid(True, alpha=0.3)
     
     # QE vs BLEU
-    axes[1].scatter(df['comet_score'], df['bleu_score'], alpha=0.5, s=20)
-    r_pearson = stats.pearsonr(df['comet_score'], df['bleu_score'])[0]
-    r_spearman = stats.spearmanr(df['comet_score'], df['bleu_score'])[0]
+    axes[1].scatter(df['ssa_qe_score'], df['bleu_score'], alpha=0.5, s=20)
+    r_pearson = stats.pearsonr(df['ssa_qe_score'], df['bleu_score'])[0]
+    r_spearman = stats.spearmanr(df['ssa_qe_score'], df['bleu_score'])[0]
     
     # Add regression line
-    z = np.polyfit(df['comet_score'], df['bleu_score'], 1)
+    z = np.polyfit(df['ssa_qe_score'], df['bleu_score'], 1)
     p = np.poly1d(z)
-    axes[1].plot(df['comet_score'], p(df['comet_score']), 
+    axes[1].plot(df['ssa_qe_score'], p(df['ssa_qe_score']), 
                 "r--", alpha=0.8, linewidth=2)
     
     axes[1].set_xlabel('SSA-COMET-QE Score', fontsize=12)
